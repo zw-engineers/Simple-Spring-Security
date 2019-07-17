@@ -32,6 +32,12 @@ we would need to specify a user with a password to access any of the endpoints.
 To create users with passwords and roles, we will create a config class that will
 extend the `WebSecurityConfigurerAdapter`.
 
+Secondly we will create a `UserDetailsService` bean that will contain our two
+dummy users we will use in this demo. Both users will have `username` and 
+`password` however, notice that both users will have the role `USER`
+and one of them will have the role `ADMIN`. This will be crucial when 
+we start thinking about `authorisation` later on.
+
 ```java
 @EnableWebSecurity
 class SecurityConfig extends WebSecurityConfigurerAdapter {
