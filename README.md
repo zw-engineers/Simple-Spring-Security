@@ -41,6 +41,49 @@ we start thinking about `authorisation` later on.
 ```java
 @EnableWebSecurity
 class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+	// AUTHENTICATION - Defining you are WHO you say you are.
+	@Bean
+	UserDetailsService authentication() {
+		UserDetails paul = User.builder()
+				.username("paul")
+				.password("password")
+				.roles("USER")
+				.build();
+
+		UserDetails artemas = User.builder()
+				.username("artemas")
+				.password("StrongPassword!")
+				.roles("USER", "ADMIN")
+				.build();
+
+		System.out.println("	Paul's password: " + paul.getPassword());
+		System.out.println("	Artemas's password: " + artemas.getPassword());
+
+		return new InMemoryUserDetailsManager(paul, artemas);
+	}
+}
+```
+The code above will work fine. Spring Security will automatically present you 
+with a `/login` page which will allow you to login and access the endpoints
+we created in our `AccountController`. 
+
+However, when you try to login with our plain text passwords, 
+you will notice that you will be able to submit the form however, 
+you will not be redirected to access anything within the application. Also you
+will be presented with a stack trace:
+
+```java
+java.lang.IllegalArgumentException: There is no PasswordEncoder mapped for the id "null"
+```
+
+What this means is that the passwords for our users we created are not encoded.
+To rectify this we would need to encode our users' passwords which will make
+our config look like:
+
+```java
+@EnableWebSecurity
+class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// Since passwords won't work in plain text... we have to use an encoder for passwords to work through login
 	private final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
@@ -66,3 +109,6 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 }
 ```
+
+Notice that we are using `PasswordEncoderFactories.createDelegatingPasswordEncoder()` which 
+by default will encrypt our passwords with `bcrypt` encryption. :smile:
