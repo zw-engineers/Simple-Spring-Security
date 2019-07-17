@@ -180,9 +180,9 @@ Let's pay attention to the chain here:
 ```java
 http
         .authorizeRequests() // Authorise all requests
-        .mvcMatchers("/admin/**").hasRole("ADMIN") // That match /admin for any user with the role ADMIN
+        .mvcMatchers("/admin/**").hasRole("ADMIN") // That match `/admin` for any user with the role `ADMIN`
         .and() // and 
-        .authorizeRequests().anyRequest().authenticated() // then allow all authenticated requests
+        .authorizeRequests().anyRequest().authenticated() // allow all authenticated requests
         .and() // and
         .formLogin() // serve this request with a login page
         .and() // and
