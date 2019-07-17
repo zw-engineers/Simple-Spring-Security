@@ -1,4 +1,4 @@
-#Account-Security Application
+# Account-Security Application
 
 This application will demonstrate Spring Security in a nutshell.
 
