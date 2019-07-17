@@ -188,3 +188,7 @@ http
         .and() // and
         .httpBasic(); // configure basic http authentication only for this request.
 ```
+
+Now when we login you will notice that the user `Paul` shouldn't be able to access
+the `/admin` endpoint as that is only accessible for users with the role
+`ADMIN` and this is defined in our filterchain in the `configure()` method.
