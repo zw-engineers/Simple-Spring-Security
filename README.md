@@ -191,4 +191,11 @@ http
 
 Now when we login you will notice that the user `Paul` shouldn't be able to access
 the `/admin` endpoint as that is only accessible for users with the role
-`ADMIN` and this is defined in our filterchain in the `configure()` method.
+`ADMIN` and this is defined in our filter-chain in the `configure()` method.
+
+## How to run this application
+
+* `./gradlew bootRun`
+* You should be presented with a login page. 
+* Depending on who you are logged in as, try accessing the endpoints: 
+    `/everyone` and `/admin`
