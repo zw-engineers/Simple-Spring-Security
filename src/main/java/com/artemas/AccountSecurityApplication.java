@@ -44,10 +44,17 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.roles("USER", "ADMIN")
 				.build();
 
+		UserDetails james = User.builder()
+				.username("james")
+				.password(passwordEncoder.encode("James1234"))
+				.roles("USER", "MANAGER")
+				.build();
+
 		System.out.println("	Paul's password: " + paul.getPassword());
 		System.out.println("	Artemas's password: " + artemas.getPassword());
+		System.out.println("	James's password: " + james.getPassword());
 
-		return new InMemoryUserDetailsManager(paul, artemas);
+		return new InMemoryUserDetailsManager(paul, artemas, james);
 	}
 
 	@Override // AUTHORISATION - Are you authorised to access this resource?
@@ -55,6 +62,16 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				.authorizeRequests()
 				.mvcMatchers("/admin/**").hasRole("ADMIN")
+				.and()
+				.authorizeRequests().anyRequest().authenticated()
+				.and()
+				.formLogin()
+				.and()
+				.httpBasic();
+
+		http
+				.authorizeRequests()
+				.mvcMatchers("/managers").hasAnyRole("MANAGERS", "ADMIN")
 				.and()
 				.authorizeRequests().anyRequest().authenticated()
 				.and()
@@ -74,5 +91,10 @@ class AccountController {
 	@GetMapping("/admin")
 	String getAdmin() {
 		return "<h1>Administrator Page</h1> Greetings Admin!";
+	}
+
+	@GetMapping("/managers")
+	String getManagers() {
+		return "<h1>Managers Page</h1> Greetings Manager!";
 	}
 }
